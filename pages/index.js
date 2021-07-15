@@ -58,9 +58,7 @@ export default function Home({ communities }) {
       comunidade.image,
       comunidade.link,
       comunidade.title
-    ).then((res) => console.log(res));
-
-    setComunidades([...comunidades, comunidade]);
+    ).then((res) => setComunidades([...comunidades, res]));
 
     e.target.reset();
   };
