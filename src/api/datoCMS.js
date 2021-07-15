@@ -1,39 +1,9 @@
 import { GraphQLClient } from "graphql-request";
-// import { useMutation, useQuery, GraphQLClient } from "graphql-hooks";
+import { SiteClient } from "datocms-client";
 
 const API_URL = "https://graphql.datocms.com/";
 const API_TOKEN = process.env.DATOCMS_TOKEN;
-
-// const LIST_COMMUNITIES = `
-//     query ListCommunities {
-//         allCommunities {
-//             id
-//             image
-//             link
-//             title
-//         }
-//     }
-// `;
-
-// const CREATE_COMMUNITY = `
-//     mutation CreateCommunity($image: String!, $link: String!, $title: String!) {
-//         createCommunity(image: $image, link: $link, $title: title) {
-//             image
-//             link
-//             title
-//         }
-//     }
-// `;
-
-// export const { data = { allCommunities: [] }, refetch: refetchCommunities } =
-//   useQuery(LIST_COMMUNITIES);
-
-// const [createCommunity] = useMutation(CREATE_COMMUNITY);
-
-// export const createNewCommunity = async () => {
-//   await createCommunity({ variables: { image, link, title } });
-//   refetchCommunities();
-// };
+const client = new SiteClient(process.env.NEXT_PUBLIC_API_TOKEN);
 
 export const getAllCommunities = async () => {
   const data = await request({
@@ -53,4 +23,14 @@ const request = ({ query, variables }) => {
     },
   });
   return client.request(query, variables);
+};
+
+export const createNewCommunity = async (image, link, title) => {
+  const newCommunity = await client.items.create({
+    itemType: "966896",
+    title: title,
+    link: link,
+    image: image,
+  });
+  return newCommunity;
 };
