@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { ProfileBoxInfo } from "../src/components/ProfileBoxInfo";
 import { getRandomImage } from "../src/utils/getRandomImage";
-import { getAllCommunities, createNewCommunity } from "../src/api/datoCMS";
+import { createNewCommunity, getDataApi } from "../src/api/datoCMS";
 
 function ProfileSidebar({ githubUser }) {
   return (
@@ -32,7 +32,7 @@ function ProfileSidebar({ githubUser }) {
   );
 }
 
-export default function Home({ communities }) {
+export default function Home() {
   const githubUser = "mayrazan";
   const [followers, setFollowers] = useState([]);
   const [comunidades, setComunidades] = useState([]);
@@ -44,7 +44,10 @@ export default function Home({ communities }) {
   }, []);
 
   useEffect(() => {
-    setComunidades(communities);
+    (async () => {
+      const communities = await getDataApi();
+      setComunidades(communities);
+    })();
   }, []);
 
   const handleCommunity = (e) => {
@@ -115,11 +118,11 @@ export default function Home({ communities }) {
   );
 }
 
-export const getStaticProps = async () => {
-  const communities = await getAllCommunities();
-  return {
-    props: {
-      communities,
-    },
-  };
-};
+// export const getStaticProps = async () => {
+//   const communities = await getAllCommunities();
+//   return {
+//     props: {
+//       communities,
+//     },
+//   };
+// };

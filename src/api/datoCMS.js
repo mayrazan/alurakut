@@ -19,7 +19,7 @@ export const getAllCommunities = async () => {
 const request = ({ query, variables }) => {
   const client = new GraphQLClient(`${API_URL}`, {
     headers: {
-      authorization: `Bearer ${API_TOKEN}`,
+      Authorization: `Bearer ${API_TOKEN}`,
     },
   });
   return client.request(query, variables);
@@ -34,3 +34,12 @@ export const createNewCommunity = async (image, link, title) => {
   });
   return newCommunity;
 };
+
+export async function getDataApi() {
+  const records = await client.items.all({
+    filter: {
+      itemType: "966896",
+    },
+  });
+  return records;
+}
