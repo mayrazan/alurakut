@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { ProfileBoxInfo } from "../src/components/ProfileBoxInfo";
 import { getRandomImage } from "../src/utils/getRandomImage";
-import { createNewCommunity, getAllCommunities } from "../src/api/datoCMS";
+import { addCommunity, getAllCommunities } from "../src/api/datoCMS";
 
 function ProfileSidebar({ githubUser }) {
   return (
@@ -56,17 +56,20 @@ export default function Home() {
     const dadosDoForm = new FormData(e.target);
 
     const comunidade = {
-      id: new Date().toISOString(),
+      // id: new Date().toISOString(),
       title: dadosDoForm.get("title"),
       image: getRandomImage(),
       link: dadosDoForm.get("link"),
     };
 
-    createNewCommunity(
-      comunidade.image,
-      comunidade.link,
-      comunidade.title
-    ).then((res) => setComunidades([...comunidades, res]));
+    addCommunity(comunidade).then((res) =>
+      setComunidades([...comunidades, res])
+    );
+    // createNewCommunity(
+    //   comunidade.image,
+    //   comunidade.link,
+    //   comunidade.title
+    // ).then((res) => setComunidades([...comunidades, res]));
 
     e.target.reset();
   };
