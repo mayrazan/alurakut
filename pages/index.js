@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { ProfileBoxInfo } from "../src/components/ProfileBoxInfo";
 import { getRandomImage } from "../src/utils/getRandomImage";
-import { createNewCommunity, getDataApi } from "../src/api/datoCMS";
+import { createNewCommunity, getAllCommunities } from "../src/api/datoCMS";
 
 function ProfileSidebar({ githubUser }) {
   return (
@@ -45,7 +45,8 @@ export default function Home() {
 
   useEffect(() => {
     (async () => {
-      const communities = await getDataApi();
+      // const communities = await getDataApi();
+      const communities = await getAllCommunities();
       setComunidades(communities);
     })();
   }, []);

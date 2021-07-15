@@ -1,29 +1,8 @@
-import { GraphQLClient } from "graphql-request";
 import { SiteClient } from "datocms-client";
+import axios from "axios";
 
 const API_URL = "https://graphql.datocms.com/";
-const API_TOKEN = process.env.DATOCMS_TOKEN;
 const client = new SiteClient(process.env.NEXT_PUBLIC_API_TOKEN);
-
-export const getAllCommunities = async () => {
-  const data = await request({
-    query: `{ allCommunities { 
-            id
-            image
-            link
-            title } }`,
-  });
-  return data.allCommunities;
-};
-
-const request = ({ query, variables }) => {
-  const client = new GraphQLClient(`${API_URL}`, {
-    headers: {
-      Authorization: `Bearer ${API_TOKEN}`,
-    },
-  });
-  return client.request(query, variables);
-};
 
 export const createNewCommunity = async (image, link, title) => {
   const newCommunity = await client.items.create({
@@ -43,3 +22,25 @@ export async function getDataApi() {
   });
   return records;
 }
+
+const data = {
+  query: `query {
+      allCommunities { 
+        id
+        image
+        link
+        title 
+      }
+    }`,
+};
+
+export const getAllCommunities = async () => {
+  const result = await axios.post(`${API_URL}`, data, {
+    headers: {
+      Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+  });
+  return result.data.data.allCommunities;
+};
