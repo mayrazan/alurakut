@@ -35,12 +35,16 @@ function ProfileSidebar({ githubUser }) {
 export default function Home({ communities }) {
   const githubUser = "mayrazan";
   const [followers, setFollowers] = useState([]);
-  const [comunidades, setComunidades] = useState(communities);
+  const [comunidades, setComunidades] = useState([]);
 
   useEffect(() => {
     axios
       .get(`https://api.github.com/users/${githubUser}/followers`)
       .then((res) => setFollowers(res.data));
+  }, []);
+
+  useEffect(() => {
+    setComunidades(communities);
   }, []);
 
   const handleCommunity = (e) => {
@@ -117,6 +121,5 @@ export const getStaticProps = async () => {
     props: {
       communities,
     },
-    revalidate: 120,
   };
 };
