@@ -195,7 +195,7 @@ function AlurakutMenuProfileSidebar({ githubUser }) {
 export function AlurakutProfileSidebarMenuDefault() {
   const menuInfo = [
     { name: "Perfil", path: `${BASE_URL}/icons/user.svg`, href: "/" },
-    { name: "Recados", path: `${BASE_URL}/icons/book.svg`, href: "/" },
+    { name: "Recados", path: `${BASE_URL}/icons/book.svg`, href: "/scrap" },
     { name: "Fotos", path: `${BASE_URL}/icons/camera.svg`, href: "/" },
     { name: "Depoimentos", path: `${BASE_URL}/icons/sun.svg`, href: "/" },
   ];
@@ -458,9 +458,9 @@ const AlurakutLoginScreen = css`
           display: block;
           border: 0;
           padding: 12px;
-          border-radius: var(--commonRadius);
+          /* border-radius: var(--commonRadius);
           background-color: var(--colorPrimary);
-          color: var(--textSecondaryColor);
+          color: var(--textSecondaryColor); */
         }
       }
     }

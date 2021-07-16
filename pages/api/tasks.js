@@ -7,11 +7,9 @@ export default async function recebedorDeRequests(request, response) {
 
     // Validar os dados, antes de sair cadastrando
     const registroCriado = await client.items.create({
-      itemType: "966896", // ID do Model de "Communities" criado pelo Dato
+      itemType: request.itemType, // ID do Model de "Communities" criado pelo Dato
       ...request.body,
     });
-
-    console.log(registroCriado);
 
     response.json({
       registroCriado: registroCriado,
@@ -23,3 +21,6 @@ export default async function recebedorDeRequests(request, response) {
     message: "Ainda não temos nada no GET, mas no POST tem!",
   });
 }
+
+// itemType: "966896"
+// itemType: "971615"

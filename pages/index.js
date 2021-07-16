@@ -3,52 +3,29 @@ import Box from "../src/components/Box";
 import {
   AlurakutMenu,
   OrkutNostalgicIconSet,
-  AlurakutProfileSidebarMenuDefault,
 } from "../src/lib/AlurakutCommons";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { ProfileBoxInfo } from "../src/components/ProfileBoxInfo";
 import { getRandomImage } from "../src/utils/getRandomImage";
-import { addCommunity, getAllCommunities } from "../src/api/datoCMS";
-
-function ProfileSidebar({ githubUser }) {
-  return (
-    <Box as="aside">
-      <img
-        src={`https://github.com/${githubUser}.png`}
-        style={{ borderRadius: "8px" }}
-      />
-      <hr />
-
-      <p>
-        <a className="boxLink" href={`https://github.com/${githubUser}`}>
-          @{githubUser}
-        </a>
-      </p>
-      <hr />
-
-      <AlurakutProfileSidebarMenuDefault />
-    </Box>
-  );
-}
+import { addRecord, getAllCommunities, getAllScraps } from "../src/api/datoCMS";
+import { ProfileSidebar } from "../src/components/ProfileSideBar";
+import { TasksBox } from "../src/components/TasksBox";
 
 export default function Home() {
   const githubUser = "mayrazan";
   const [followers, setFollowers] = useState([]);
   const [comunidades, setComunidades] = useState([]);
+  const [scraps, setScraps] = useState([]);
 
   useEffect(() => {
     axios
       .get(`https://api.github.com/users/${githubUser}/followers`)
       .then((res) => setFollowers(res.data));
-  }, []);
 
-  useEffect(() => {
-    (async () => {
-      // const communities = await getDataApi();
-      const communities = await getAllCommunities();
-      setComunidades(communities);
-    })();
+    getAllCommunities().then((res) => setComunidades(res));
+
+    getAllScraps().then((res) => setScraps(res));
   }, []);
 
   const handleCommunity = (e) => {
@@ -56,20 +33,13 @@ export default function Home() {
     const dadosDoForm = new FormData(e.target);
 
     const comunidade = {
-      // id: new Date().toISOString(),
       title: dadosDoForm.get("title"),
       image: getRandomImage(),
       link: dadosDoForm.get("link"),
+      itemType: "966896",
     };
 
-    addCommunity(comunidade).then((res) =>
-      setComunidades([...comunidades, res])
-    );
-    // createNewCommunity(
-    //   comunidade.image,
-    //   comunidade.link,
-    //   comunidade.title
-    // ).then((res) => setComunidades([...comunidades, res]));
+    addRecord(comunidade).then((res) => setComunidades([...comunidades, res]));
 
     e.target.reset();
   };
@@ -85,30 +55,14 @@ export default function Home() {
           <Box>
             <h1 className="title">Bem vindo(a)</h1>
 
-            <OrkutNostalgicIconSet confiavel={3} legal={3} sexy={3} />
+            <OrkutNostalgicIconSet
+              confiavel={3}
+              legal={3}
+              sexy={3}
+              recados={scraps.length}
+            />
           </Box>
-          <Box>
-            <h2 className="subTitle">O que você deseja fazer?</h2>
-            <form onSubmit={handleCommunity}>
-              <div>
-                <input
-                  placeholder="Qual vai ser o nome da sua comunidade?"
-                  name="title"
-                  aria-label="Qual vai ser o nome da sua comunidade?"
-                  type="text"
-                />
-              </div>
-              <div>
-                <input
-                  placeholder="Coloque um link para sua comunidade"
-                  name="link"
-                  aria-label="Coloque um link para sua comunidade"
-                />
-              </div>
-
-              <button>Criar comunidade</button>
-            </form>
-          </Box>
+          <TasksBox onSubmit={handleCommunity} />
         </div>
         <div
           className="profileRelationsArea"
@@ -121,12 +75,3 @@ export default function Home() {
     </>
   );
 }
-
-// export const getStaticProps = async () => {
-//   const communities = await getAllCommunities();
-//   return {
-//     props: {
-//       communities,
-//     },
-//   };
-// };

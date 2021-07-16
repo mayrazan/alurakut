@@ -55,6 +55,20 @@ const Box = styled.div`
     border-radius: 10000px;
     background-color: #6f92bb;
   }
+
+  .scrap-path {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    color: #999999;
+    margin: 8px 0px;
+  }
+
+  .scrap-path a {
+    color: #2e7bb4;
+    text-decoration: none;
+  }
 `;
 
 export default Box;
