@@ -14,15 +14,17 @@ import ScrapGrid from "../src/components/ScrapGrid";
 import { AlurakutMenu } from "../src/lib/AlurakutCommons";
 
 const Scrap = () => {
-  const githubUser = localStorage.getItem("githubUser")
-    ? JSON.parse(localStorage.getItem("githubUser") || "")
-    : "";
   const [scraps, setScraps] = useState([]);
+  const [githubUser, setGithubUser] = useState("mayrazan");
   const router = useRouter();
 
   useEffect(() => {
     getAllScraps().then((res) => setScraps(res));
-  }, []);
+    if (githubUser) {
+      const user = JSON.parse(window.localStorage.getItem("githubUser"));
+      setGithubUser(user);
+    }
+  }, [githubUser]);
 
   return (
     <>

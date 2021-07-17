@@ -13,17 +13,23 @@ import ScrapGrid from "../src/components/ScrapGrid";
 import { AlurakutMenu } from "../src/lib/AlurakutCommons";
 
 const Profile = () => {
-  const githubUser = localStorage.getItem("githubUser")
-    ? JSON.parse(localStorage.getItem("githubUser") || "")
-    : "";
+  const [githubUser, setGithubUser] = useState("mayrazan");
   const [profile, setProfile] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
+    if (githubUser) {
+      const user = JSON.parse(window.localStorage.getItem("githubUser"));
+      setGithubUser(user);
+      setIsLoading(false);
+    }
     getProfileInfo(githubUser).then((res) => setProfile(res));
-  }, []);
+  }, [githubUser]);
 
-  return (
+  return isLoading ? (
+    <span>carregando</span>
+  ) : (
     <>
       <AlurakutMenu githubUser={githubUser} />
       <ScrapGrid>
