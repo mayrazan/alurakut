@@ -101,11 +101,10 @@ export async function getServerSideProps(context) {
       },
     }
   ).then((res) => res.json());
-  const { githubUser } = jwt.decode(token);
 
-  const auth = await verifyUser(githubUser);
+  // const auth = await verifyUser(githubUser);
 
-  if (!isAuthenticated && !auth) {
+  if (!isAuthenticated) {
     return {
       redirect: {
         destination: "/login",
@@ -113,6 +112,8 @@ export async function getServerSideProps(context) {
       },
     };
   }
+
+  const { githubUser } = jwt.decode(token);
 
   return {
     props: {
