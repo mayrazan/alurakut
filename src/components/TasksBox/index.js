@@ -30,8 +30,16 @@ export const TasksBox = ({ onSubmit }) => {
   return (
     <Box>
       <h2 className="subTitle">O que você deseja fazer?</h2>
-      <ButtonTask text="Criar comunidade" onClick={handleClick} />
-      <ButtonTask text="Deixar um scrap" onClick={handleClick} />
+      <ButtonTask
+        text="Criar comunidade"
+        onClick={handleClick}
+        className={flag === "Criar comunidade" && "isActive"}
+      />
+      <ButtonTask
+        text="Deixar um scrap"
+        onClick={handleClick}
+        className={flag === "Deixar um scrap" && "isActive"}
+      />
       {flag === "Criar comunidade" ? (
         <form onSubmit={onSubmit}>
           <div>
@@ -50,7 +58,7 @@ export const TasksBox = ({ onSubmit }) => {
             />
           </div>
 
-          <button>Criar comunidade</button>
+          <button className="btnStyle">Criar comunidade</button>
         </form>
       ) : (
         <form onSubmit={handleScrap}>
@@ -67,7 +75,7 @@ export const TasksBox = ({ onSubmit }) => {
             type="text"
           />
 
-          <button>Criar scrap</button>
+          <button className="btnStyle">Criar scrap</button>
         </form>
       )}
     </Box>

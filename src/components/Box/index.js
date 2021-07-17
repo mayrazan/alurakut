@@ -51,8 +51,13 @@ const Box = styled.div`
   button {
     border: 0;
     padding: 8px 12px;
-    color: #ffffff;
+    /* color: #ffffff; */
     border-radius: 10000px;
+    /* background-color: #6f92bb; */
+  }
+
+  .btnStyle {
+    color: #ffffff;
     background-color: #6f92bb;
   }
 
@@ -68,6 +73,11 @@ const Box = styled.div`
   .scrap-path a {
     color: #2e7bb4;
     text-decoration: none;
+  }
+
+  .isActive {
+    background-color: #6f92bb;
+    color: #ffffff;
   }
 `;
 

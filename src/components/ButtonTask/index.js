@@ -1,9 +1,4 @@
-import styled, { css } from "styled-components";
-
-export const PropsBtn = css`
-  background-color: #6f92bb;
-  color: #ffffff;
-`;
+import styled from "styled-components";
 
 export const BtnTask = styled.button`
   padding: 9px 12px !important;
@@ -19,9 +14,9 @@ export const BtnTask = styled.button`
   line-height: 14px;
 `;
 
-export const ButtonTask = ({ text, onClick }) => {
+export const ButtonTask = ({ text, onClick, className }) => {
   return (
-    <BtnTask onClick={onClick} name={text}>
+    <BtnTask onClick={onClick} name={text} className={className}>
       {text}
     </BtnTask>
   );

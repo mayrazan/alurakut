@@ -1,11 +1,10 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { getAllScraps } from "../src/api/datoCMS";
+import { getProfileInfo } from "../src/api/getProfileInfo";
 import { ProfileSidebar } from "../src/components/ProfileSideBar";
 import {
   ScrapBox,
   BoxTitle,
-  AvatarStyled,
   ContainerInfoStyled,
   ScrapTextStyled,
   NameStyled,
@@ -13,13 +12,15 @@ import {
 import ScrapGrid from "../src/components/ScrapGrid";
 import { AlurakutMenu } from "../src/lib/AlurakutCommons";
 
-const Scrap = () => {
+const Profile = () => {
   const githubUser = JSON.parse(localStorage.getItem("githubUser"));
-  const [scraps, setScraps] = useState([]);
+  const [profile, setProfile] = useState({});
   const router = useRouter();
 
   useEffect(() => {
-    getAllScraps().then((res) => setScraps(res));
+    if (githubUser) {
+      getProfileInfo(githubUser).then((res) => setProfile(res));
+    }
   }, []);
 
   return (
@@ -31,27 +32,24 @@ const Scrap = () => {
         </div>
         <div className="scrapArea" style={{ gridArea: "scrapArea" }}>
           <BoxTitle>
-            <h2 className="title">Meus recados</h2>
+            <h2 className="title">Meu perfil</h2>
             <p className="scrap-path">
               <a onClick={() => router.push("/")}>Início</a>
-              {" > "}Meus recados
+              {" > "}Meu perfil
             </p>
           </BoxTitle>
-          {scraps.map((item, index) => {
-            return (
-              <ScrapBox color={index} key={item.id}>
-                <AvatarStyled src={item.avatar} alt={item.avatar} />
-                <ContainerInfoStyled>
-                  <ScrapTextStyled>{item.message}</ScrapTextStyled>
-                  <NameStyled>@{item.creatorslug}</NameStyled>
-                </ContainerInfoStyled>
-              </ScrapBox>
-            );
-          })}
+
+          <ScrapBox key={profile.id}>
+            <ContainerInfoStyled>
+              <span>Bio</span>
+              <ScrapTextStyled>{profile.bio}</ScrapTextStyled>
+              <NameStyled>Repositórios: {profile.public_repos}</NameStyled>
+            </ContainerInfoStyled>
+          </ScrapBox>
         </div>
       </ScrapGrid>
     </>
   );
 };
 
-export default Scrap;
+export default Profile;

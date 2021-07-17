@@ -1,3 +1,6 @@
+import React from "react";
+import nookies from "nookies";
+import jwt from "jsonwebtoken";
 import MainGrid from "../src/components/MainGrid";
 import Box from "../src/components/Box";
 import {
@@ -5,27 +8,33 @@ import {
   OrkutNostalgicIconSet,
 } from "../src/lib/AlurakutCommons";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { ProfileBoxInfo } from "../src/components/ProfileBoxInfo";
 import { getRandomImage } from "../src/utils/getRandomImage";
 import { addRecord, getAllCommunities, getAllScraps } from "../src/api/datoCMS";
 import { ProfileSidebar } from "../src/components/ProfileSideBar";
 import { TasksBox } from "../src/components/TasksBox";
+import {
+  getProfileFollowers,
+  getProfileInfo,
+  verifyUser,
+} from "../src/api/getProfileInfo";
 
-export default function Home() {
-  const githubUser = "mayrazan";
+export default function Home(props) {
+  const githubUser = props.githubUser;
   const [followers, setFollowers] = useState([]);
   const [comunidades, setComunidades] = useState([]);
   const [scraps, setScraps] = useState([]);
+  const [followersCount, setFollowersCount] = useState({});
 
   useEffect(() => {
-    axios
-      .get(`https://api.github.com/users/${githubUser}/followers`)
-      .then((res) => setFollowers(res.data));
+    getProfileFollowers(githubUser).then((res) => setFollowers(res));
+
+    getProfileInfo(githubUser).then((res) => setFollowersCount(res));
 
     getAllCommunities().then((res) => setComunidades(res));
 
     getAllScraps().then((res) => setScraps(res));
+    localStorage.setItem("githubUser", JSON.stringify(githubUser));
   }, []);
 
   const handleCommunity = (e) => {
@@ -69,9 +78,45 @@ export default function Home() {
           style={{ gridArea: "profileRelationsArea" }}
         >
           <ProfileBoxInfo type={1} title="Comunidades" array={comunidades} />
-          <ProfileBoxInfo title="Pessoas da comunidade" array={followers} />
+          <ProfileBoxInfo
+            title="Pessoas da comunidade"
+            array={followers}
+            count={followersCount.followers}
+          />
         </div>
       </MainGrid>
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  const cookies = nookies.get(context);
+  const token = cookies.USER_TOKEN;
+  const { githubUser } = jwt.decode(token);
+
+  const auth = await verifyUser(githubUser);
+
+  const { isAuthenticated } = await fetch(
+    "https://alurakut.vercel.app/api/auth",
+    {
+      headers: {
+        Authorization: token,
+      },
+    }
+  ).then((res) => res.json());
+
+  if (!isAuthenticated && !auth) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      githubUser,
+    }, // will be passed to the page component as props
+  };
 }

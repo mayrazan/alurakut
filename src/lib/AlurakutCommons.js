@@ -1,6 +1,8 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import NextLink from "next/link";
+import nookies from "nookies";
+import { useRouter } from "next/router";
 
 const BASE_URL = "http://alurakut.vercel.app/";
 const v = "1";
@@ -17,7 +19,15 @@ function Link({ href, children, ...props }) {
 // Menu
 // ================================================================================================================
 export function AlurakutMenu({ githubUser }) {
+  const router = useRouter();
   const [isMenuOpen, setMenuState] = React.useState(false);
+
+  const handleLogout = () => {
+    nookies.destroy(null, "USER_TOKEN");
+    localStorage.removeItem("githubUser");
+    router.push("/login");
+  };
+
   return (
     <AlurakutMenu.Wrapper isMenuOpen={isMenuOpen}>
       <div className="container">
@@ -39,7 +49,7 @@ export function AlurakutMenu({ githubUser }) {
         </nav>
 
         <nav>
-          <a href={`/logout`}>Sair</a>
+          <a onClick={handleLogout}>Sair</a>
           <div>
             <input placeholder="Pesquisar no Orkut" />
           </div>
@@ -193,19 +203,26 @@ function AlurakutMenuProfileSidebar({ githubUser }) {
 // AlurakutProfileSidebarMenuDefault
 // ================================================================================================================
 export function AlurakutProfileSidebarMenuDefault() {
+  const router = useRouter();
   const menuInfo = [
-    { name: "Perfil", path: `${BASE_URL}/icons/user.svg`, href: "/" },
+    { name: "Perfil", path: `${BASE_URL}/icons/user.svg`, href: "/profile" },
     { name: "Recados", path: `${BASE_URL}/icons/book.svg`, href: "/scrap" },
     { name: "Fotos", path: `${BASE_URL}/icons/camera.svg`, href: "/" },
     { name: "Depoimentos", path: `${BASE_URL}/icons/sun.svg`, href: "/" },
   ];
+
+  const handleLogout = () => {
+    nookies.destroy(null, "USER_TOKEN");
+    localStorage.removeItem("githubUser");
+    router.push("/login");
+  };
 
   return (
     <AlurakutProfileSidebarMenuDefault.Wrapper>
       <nav>
         {menuInfo.map((item, index) => {
           return (
-            <a href={item.href} key={index}>
+            <a onClick={() => router.push(item.href)} key={index}>
               <img src={item.path} />
               {item.name}
             </a>
@@ -218,7 +235,7 @@ export function AlurakutProfileSidebarMenuDefault() {
           <img src={`${BASE_URL}/icons/plus.svg`} />
           GitHub Trends
         </a>
-        <a href="/logout">
+        <a onClick={handleLogout}>
           <img src={`${BASE_URL}//icons/logout.svg`} />
           Sair
         </a>
@@ -458,10 +475,27 @@ const AlurakutLoginScreen = css`
           display: block;
           border: 0;
           padding: 12px;
-          /* border-radius: var(--commonRadius);
-          background-color: var(--colorPrimary);
-          color: var(--textSecondaryColor); */
         }
+
+        .loginBtn {
+          border-radius: var(--commonRadius);
+          background-color: var(--colorPrimary);
+          color: var(--textSecondaryColor);
+          font-weight: bold;
+          line-height: 15px;
+        }
+      }
+
+      .invalidUser {
+        font-style: normal;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 14px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        color: rgb(248 93 82);
+        margin-top: 15px;
       }
     }
     .footerArea {
