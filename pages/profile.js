@@ -18,9 +18,7 @@ const Profile = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (githubUser) {
-      getProfileInfo(githubUser).then((res) => setProfile(res));
-    }
+    getProfileInfo(githubUser).then((res) => setProfile(res));
   }, []);
 
   return (
