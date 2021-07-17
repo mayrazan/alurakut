@@ -13,7 +13,7 @@ import ScrapGrid from "../src/components/ScrapGrid";
 import { AlurakutMenu } from "../src/lib/AlurakutCommons";
 
 const Profile = () => {
-  const githubUser = JSON.parse(localStorage.getItem("githubUser"));
+  const githubUser = JSON.parse(localStorage.getItem("githubUser") || "");
   const [profile, setProfile] = useState({});
   const router = useRouter();
 

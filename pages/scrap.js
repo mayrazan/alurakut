@@ -14,7 +14,7 @@ import ScrapGrid from "../src/components/ScrapGrid";
 import { AlurakutMenu } from "../src/lib/AlurakutCommons";
 
 const Scrap = () => {
-  const githubUser = JSON.parse(localStorage.getItem("githubUser"));
+  const githubUser = JSON.parse(localStorage.getItem("githubUser") || "");
   const [scraps, setScraps] = useState([]);
   const router = useRouter();
 
