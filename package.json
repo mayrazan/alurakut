@@ -7,7 +7,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "datocms-client": "^3.4.11",
     "graphql": "^15.5.1",
     "graphql-hooks": "^5.2.0",
